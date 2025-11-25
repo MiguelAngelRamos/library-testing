@@ -23,8 +23,8 @@ public class LibraryService {
 <span class="pc" id="L23">                .orElseThrow(() -&gt; new LoanException(&quot;Libro no encontrado: &quot; + isbn));</span>
 
         // 2. Lógica de Negocio: Verificar Stock
-<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        if (book.totalCopies() &lt;= 0) {</span>
-<span class="nc" id="L27">            throw new LoanException(&quot;No hay stock disponible para el libro: &quot; + book.title());</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (book.totalCopies() &lt;= 0) {</span>
+<span class="fc" id="L27">            throw new LoanException(&quot;No hay stock disponible para el libro: &quot; + book.title());</span>
         }
 
         // 3. Lógica de Negocio: Regla VIP (Solo para demostración de tests parametrizados luego)

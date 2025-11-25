@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -82,8 +84,18 @@ class LibraryServiceTest {
 
    assertEquals("No hay stock disponible para el libro: Cobol Antiguo", exception.getMessage());
 
-    
+  }
 
+  @ParameterizedTest
+  @ValueSource(strings = {"000", "XYZ", "   "})
+  @DisplayName("Debe fallar si el libro no existe en la base de datos")
+  void testBookNotFound(String invalidIsbn) {
+    
+    when(bookRepository.findByIsbn(invalidIsbn)).thenReturn(Optional.empty());
+
+    assertThrows(LoanException.class, () -> {
+      libraryService.loanBook(invalidIsbn, commonMember);
+    });
   }
 
 
