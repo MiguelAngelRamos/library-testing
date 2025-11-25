@@ -10,10 +10,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import cl.kibernumacademy.library.domain.Book;
 import cl.kibernumacademy.library.domain.Member;
+import cl.kibernumacademy.library.exceptions.LoanException;
 import cl.kibernumacademy.library.ports.BookRepository;
 import cl.kibernumacademy.library.ports.NotificationService;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
@@ -59,6 +62,28 @@ class LibraryServiceTest {
 
     // Verificamos que no se haya lanzado ninguna excepcion
     assertDoesNotThrow(() -> libraryService.loanBook("12345", commonMember));
+  }
+
+  @Test
+  @DisplayName("Debe lanzar LoanException si no hay stock disponible")
+  void testLoanNoStock() {
+    // stubear definir el comportamiento de un mock
+    // "Cuando se llame a este método en el mock, devuelve esto"
+    // 1. Arrange (preparar el escenario)
+    when(bookRepository.findByIsbn("99999")).thenReturn(Optional.of(bookOutOfStock));
+
+    // 2. Act y Assert (Combinar para excepciones)
+    LoanException exception = assertThrows(LoanException.class, () -> {
+      libraryService.loanBook("99999", commonMember);
+    });
+
+    // throw new LoanException("No hay stock disponible para el libro: " + book.title());
+   // Cobol Antiguo
+
+   assertEquals("No hay stock disponible para el libro: Cobol Antiguo", exception.getMessage());
+
+    
+
   }
 
 
